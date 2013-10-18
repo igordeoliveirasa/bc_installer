@@ -4,6 +4,11 @@
 
 class Installer
 
+  def initialize
+    self.bc_urls = {}
+    self.bc_urls["1.5"] = "http://www.bouncycastle.org/download/bcprov-jdk15on-149.jar"
+  end
+
   def list_java_versions
     ret = []
     puts "Listando java versions..."
