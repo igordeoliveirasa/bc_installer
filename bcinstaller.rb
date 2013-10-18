@@ -1,12 +1,16 @@
 
-
+require 'open-uri'
 
 
 class Installer
 
   def initialize
-    self.bc_urls = {}
-    self.bc_urls["1.5"] = "http://www.bouncycastle.org/download/bcprov-jdk15on-149.jar"
+    @bc_urls = {}
+    @bc_urls["1.4"] = "http://www.bouncycastle.org/download/bcprov-jdk14-149.jar"
+    @bc_urls["1.5"] = "http://www.bouncycastle.org/download/bcprov-jdk15on-149.jar"
+    @bc_urls["1.6"] = "http://www.bouncycastle.org/download/bcprov-jdk15on-149.jar"
+    @bc_urls["1.7"] = "http://www.bouncycastle.org/download/bcprov-jdk15on-149.jar"
+    @current_dir = Dir.getwd
   end
 
   def list_java_versions
@@ -16,6 +20,7 @@ class Installer
     default_java_dir_paths.each do |dir|
       Dir.chdir(dir)
       java_dirs = Dir.glob("*")
+      Dir.chdir(@current_dir)
       java_dirs.each do |java_dir|
         ret.push(/(?<major>\d+).(?<minor>\d+)/.match(java_dir))
       end
@@ -39,7 +44,13 @@ class Installer
 
   def download_bc(version)
     # to do
-    puts "Downloading bcprovider for java #{version}" 
+    puts "Downloading bcprovider for java #{version}..." 
+    url = @bc_urls[version.to_s]
+    file_name = "bc_provider_#{version}.jar"
+    open(file_name, 'wb') do |file|
+      file << open(url).read
+    end
+    file_name
   end
 
   def install_bc
@@ -51,7 +62,7 @@ class Installer
 
   def run
     version = choose_java_version()
-    download_bc(version)
+    fp = download_bc(version)
     install_bc()
   end
 
