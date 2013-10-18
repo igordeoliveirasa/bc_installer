@@ -1,6 +1,4 @@
-
 require 'open-uri'
-
 
 class Installer
 
@@ -53,8 +51,7 @@ class Installer
     file_name
   end
 
-  def install_bc
-    puts "Decompressing bcprovider"
+  def install_bc(fp)
     puts "Copying files"
     puts "Writing at java.security"
     puts "Done!"
@@ -63,7 +60,7 @@ class Installer
   def run
     version = choose_java_version()
     fp = download_bc(version)
-    install_bc()
+    install_bc(fp)
   end
 
 end
@@ -72,9 +69,3 @@ if __FILE__ == $0
   installer = Installer.new
   installer.run
 end
-
-
-
-
-
-
